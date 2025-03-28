@@ -10,7 +10,7 @@ on:
       - 'README.md'
       - '.gitignore'
       - 'Taskfile.yml'
-      - example.env
+      - 'example.env'
 
 jobs:
   build:
