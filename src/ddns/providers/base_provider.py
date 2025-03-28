@@ -5,6 +5,7 @@ class DDNSProvider(abc.ABC):
     def __init__(self):
         self.zone_name = None
         self.record_name = None
+        self.ttl = self.getTTL()
 
     @abc.abstractmethod
     def get_zone_id(self):
