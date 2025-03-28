@@ -11,6 +11,10 @@ class CloudflareProvider(DDNSProvider):
         self.api_token = os.getenv("CF_API_TOKEN")
         self.zone_name = os.getenv("CF_ZONE_NAME")
         self.record_name = os.getenv("CF_RECORD_NAME")
+        # TODO - abstract to par
+        self.ttl = self.getTTL()
+        if not self.ttl or self.ttl < 1:
+            raise ValueError(f'TTL "{self.ttl}" is invalid. It must be >=1')
 
         if not all([self.api_token, self.zone_name, self.record_name]):
             raise ValueError("Missing required environment variables: CF_API_TOKEN, CF_ZONE_NAME, CF_RECORD_NAME")
@@ -44,7 +48,7 @@ class CloudflareProvider(DDNSProvider):
             "type": "A",
             "name": self.record_name,
             "content": ip,
-            "ttl": 120,
+            "ttl": self.ttl,
             "proxied": False
         }
         response = requests.put(url, headers=self.headers, json=data)
